@@ -5,5 +5,5 @@ Here you will find a collection of codes that will help improve your pythonic kn
 
 ## What we have so far:
 
-#The poker game!
+# The poker game!
 Poker is an interesting game, and it is even more interesting to code it! You can find sample codes on this subject on the "Poker" folder. To make it easier for python padawans to have a better understanding of code logic, there are three main versions of the "Checking poker hands", which is the core of a poker game: the simplified, using functions, and using classes. Feel free to check each one individually, or jump right into a mini poker game, where more advanced structure and logic is used.
