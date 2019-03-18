@@ -7,6 +7,7 @@ class Player():
         self.hand = []
         self.money = []
         self.bet_amount = 0
+        self.status = None
 
 
     ############################################
@@ -87,7 +88,8 @@ class Player():
     def check_suits(hand, player_suits):
         #checking for flush:
         if (len(player_suits) == 1) and ('four_of_a_kind' not in hand):
-            hand = ['flush']
+            if (len(player_suits.values()) == 4):
+                hand = ['flush']
 
         return hand
 
@@ -161,6 +163,7 @@ class Player():
 
     def bet(self,table,value):
         if self.check_money(value) == True:
+            self.status = 'betting'
             self.bet_amount = value
             table.current_bet = value
             return value
@@ -170,6 +173,7 @@ class Player():
 
     def increase_bet(self,table,value):
         if self.check_money(value) == True:
+            self.status = 'increasing_bet'
             new_bet = table.current_bet + value
             self.bet_amount = new_bet
             table.current_bet = new_bet
@@ -180,6 +184,7 @@ class Player():
 
     def cover_bet(self,table):
         if self.check_money(table.current_bet) == True:
+            self.status = 'covering_bet'
             self.bet_amount = table.current_bet
             return self.bet_amount
         else:
@@ -194,7 +199,11 @@ class Player():
         elif move == 'cover':
             return self.cover_bet(table)
         elif move == 'pass':
+            self.status = 'passing'
             return 'pass'
+        elif move == 'fold':
+            self.status = 'folded'
+            return 'fold'
         else:
             print("Sorry "+ self.name + ", this was an invalid move")
-            return -2
+            return -1

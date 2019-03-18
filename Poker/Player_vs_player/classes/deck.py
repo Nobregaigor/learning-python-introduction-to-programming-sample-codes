@@ -19,16 +19,17 @@ class Deck():
         #create a list of court
         COURT = ['Jack','Queen','King']
         #create a list of numerals
-        NUMERALS = list(range(2, n_Cards_for_Suits - 3)) #We are subtracting 3 because we are adding the court to the numerals
+        NUMERALS = list(range(2, n_Cards_for_Suits - 2)) #We are subtracting 2 because we are adding the court to the numerals
         NUMERALS.insert(0,'Ace')
         NUMERALS.extend(COURT)
 
         #create deck
         deck = []
-        for i in range(n_Cards_for_Suits - 1): #Subtracting one because counter starts at 0
+        for i in range(n_Cards_for_Suits):
             for j in range(n_Suits):
+                img = 'imgs/' + (str(NUMERALS[i])[0] + SUITS[j][0]).upper() + '.png'
                 deck.append(
-                    Card(NUMERALS[i],SUITS[j],i+1)
+                    Card(NUMERALS[i],SUITS[j],i+1,img)
                 )
 
         self.cards = deck

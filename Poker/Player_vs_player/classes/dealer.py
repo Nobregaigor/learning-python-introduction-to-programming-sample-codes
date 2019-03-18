@@ -42,3 +42,10 @@ class Dealer():
             table.cards[4].status = 'unfolded'
         else:
             raise ValueError('Wrong round provided to the dealer. Please, check it again')
+
+    def ask_for_bets(self):
+        print("Anyone wants to make a bet?")
+
+    def pay_player(self, player, amount):
+        player.money = amount
+        
