@@ -34,6 +34,8 @@ class Game():
 
     def start_turn(self):
         self.dealer.distribute_cards(self.deck,self.players,self.table)
+        print("Initial bet: ")
+        self.player_bets()
 
     def update_active_players(self,player):
         if player.status != 'folded':
@@ -52,18 +54,27 @@ class Game():
                 player.check_hand(self.table)
                 print("- This is your hand: " + str(player.hand[0]))
                 print("- This is your money: " + str(player.money))
-                print("- This is the current bet: " + str(self.table.current_bet) + '\n')
-                res = input(player.name + ', this is your turn! Make a wise choice. {bet, increase, cover, pass, fold} \n')
-                vals = res.split(' ')
-                if len(vals) > 1:
-                    move = player.play_turn(self.table, vals[0],int(vals[1]))
-                else:
-                    move = player.play_turn(self.table, vals[0])
+                print("- This is the current bet: " + str(self.table.current_bet))
+                print("- This is the amount of money in the table: " + str(self.table.money) + '\n')
+                print(player.name + ", this is your turn! Make a wise choice.")
+                move = -1
+                while move == -1:
+                    res = input('Options: {increase, cover, pass, fold} \n')
+                    vals = res.split(' ')
+                    if len(vals) > 1:
+                        move = player.play_turn(self.table, vals[0],int(vals[1]))
+                    else:
+                        move = player.play_turn(self.table, vals[0])
+                    if move == -1:
+                        print('Please, try again!\n')
             self.update_active_players(player)
 
     def check_active_players(self):
         if len(self.active_players) != 1:
             return True
+
+    def resolve_winner(self,player,table):
+        player.money += table.money
 
     def display_unfolded_cards(self,table):
         for card in table.cards:
@@ -73,8 +84,6 @@ class Game():
     def play_turn(self):
         print("====== Starting turn ======")
         self.start_turn()
-        print("Initial bet: ")
-        self.player_bets()
         if self.check_active_players() == True:
             print("\n"*15)
             for i in range(3):
@@ -89,13 +98,16 @@ class Game():
                     self.player_bets()
                     print("\n"*15)
                 else:
-                    print('\n\nPlayer ' + self.active_players[0] + ' won this round')
+                    winner = self.players[self.active_players[0]]
+                    print('\n\nPlayer ' + winner.name + ' won this round')
+                    self.resolve_winner(winner,self.table)
+                    print(winner.money)
+                    break
         else:
-            print('\n\nPlayer ' + self.active_players[0] + ' won this round')
-
-
-
-
+            winner = self.players[self.active_players[0]]
+            print('\n\nPlayer ' + winner.name + ' won this round')
+            self.resolve_winner(winner,self.table)
+            print(winner.money)
 
 if __name__ == '__main__':
     game = Game()

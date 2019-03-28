@@ -165,7 +165,9 @@ class Player():
         if self.check_money(value) == True:
             self.status = 'betting'
             self.bet_amount = value
+            self.money -= value
             table.current_bet = value
+            table.money += value
             return value
         else:
             print("Sorry "+ self.name + ", you don't have enough money to bet this amount")
@@ -175,8 +177,10 @@ class Player():
         if self.check_money(value) == True:
             self.status = 'increasing_bet'
             new_bet = table.current_bet + value
+            self.money -= new_bet
             self.bet_amount = new_bet
             table.current_bet = new_bet
+            table.money += new_bet
             return new_bet
         else:
             print("Sorry "+ self.name + ", you don't have enough money to bet this amount")
@@ -185,8 +189,12 @@ class Player():
     def cover_bet(self,table):
         if self.check_money(table.current_bet) == True:
             self.status = 'covering_bet'
+            value = table.current_bet - self.bet_amount
+            #update bet amount
             self.bet_amount = table.current_bet
-            return self.bet_amount
+            self.money -= value
+            table.money += value
+            return value
         else:
             print("Sorry "+ self.name + ", you don't have enough money to bet this amount")
             return -1
