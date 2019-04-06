@@ -7,6 +7,7 @@ class Player():
         self.hand = []
         self.money = []
         self.bet_amount = 0
+        self.action = None
         self.status = None
 
 
@@ -163,7 +164,7 @@ class Player():
 
     def bet(self,table,value):
         if self.check_money(value) == True:
-            self.status = 'betting'
+            self.action = 'betting'
             self.bet_amount = value
             self.money -= value
             table.current_bet = value
@@ -175,7 +176,7 @@ class Player():
 
     def increase_bet(self,table,value):
         if self.check_money(value) == True:
-            self.status = 'increasing_bet'
+            self.action = 'increasing_bet'
             new_bet = table.current_bet + value
             self.money -= new_bet
             self.bet_amount = new_bet
@@ -188,7 +189,7 @@ class Player():
 
     def cover_bet(self,table):
         if self.check_money(table.current_bet) == True:
-            self.status = 'covering_bet'
+            self.action = 'covering_bet'
             value = table.current_bet - self.bet_amount
             #update bet amount
             self.bet_amount = table.current_bet
@@ -201,16 +202,21 @@ class Player():
 
     def play_turn(self,table,move,value=0):
         if move == 'bet':
+            self.status = 'participating'
             return self.bet(table,value)
         elif move == 'increase':
+            self.status = 'participating'
             return self.increase_bet(table,value)
         elif move == 'cover':
+            self.status = 'participating'
             return self.cover_bet(table)
         elif move == 'pass':
-            self.status = 'passing'
+            self.status = 'participating'
+            self.action = 'passing'
             return 'pass'
         elif move == 'fold':
             self.status = 'folded'
+            self.action = 'folding'
             return 'fold'
         else:
             print("Sorry "+ self.name + ", this was an invalid move")

@@ -1,8 +1,8 @@
-from deck import Deck
-from cards import Card
-from player import Player
-from dealer import Dealer
-from table import Table
+from classes.deck import Deck
+from classes.cards import Card
+from classes.player import Player
+from classes.dealer import Dealer
+from classes.table import Table
 
 from pprint import pprint
 
@@ -32,18 +32,21 @@ class Game():
         self.deck.build()
         self.load_players(n_players,players)
 
+    def activate_players(self):
+        self.active_players = [*self.players]
+
     def start_turn(self):
         self.dealer.distribute_cards(self.deck,self.players,self.table)
         print("Initial bet: ")
+        self.activate_players()
         self.player_bets()
 
     def update_active_players(self,player):
-        if player.status != 'folded':
-            self.active_players.append(player.name)
+        if player.status == 'folded':
+            self.active_players.remove(player.name)
 
     def player_bets(self):
-        self.active_players = []
-        for key in self.players:
+        for key in self.active_players:
             player = self.players[key]
             if player.status != 'folded':
                 print(" ")
@@ -109,10 +112,11 @@ class Game():
             self.resolve_winner(winner,self.table)
             print(winner.money)
 
-if __name__ == '__main__':
-    game = Game()
-    game.build(2,['igor','bob'])
-    game.play_turn()
+
+# if __name__ == '__main__':
+#     game = Game()
+#     game.build(2,['igor','bob'])
+#     game.play_turn()
 
     # game.dealer.distribute_cards(game.deck,game.players,game.table)
     # game.players['igor'].check_hand(game.table)
